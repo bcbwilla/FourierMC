@@ -1,0 +1,7 @@
+main: xyz.benw.plugins.fouriermc.FourierMC
+name: FourierMC
+version: 1.0.0
+author: Ben
+website:
+description: Logs Clicks
+commands:

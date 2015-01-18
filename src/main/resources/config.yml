@@ -1,0 +1,5 @@
+checkinterval: 100
+sampleperiod: 1
+maxdatalength: 255
+tests:
+  cps: 2
