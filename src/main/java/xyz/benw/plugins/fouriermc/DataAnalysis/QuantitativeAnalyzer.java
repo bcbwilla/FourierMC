@@ -9,7 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by ben on 17/01/15.
+ * QuantativeAnalyzer
+ *
+ * Performs pass/fail tests on player's
+ * clicking signal.
+ *
  */
 public class QuantitativeAnalyzer implements Runnable {
 

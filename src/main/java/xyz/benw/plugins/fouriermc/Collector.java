@@ -6,7 +6,10 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by ben on 16/01/15.
+ * Collector
+ *
+ * Each sample period, a
+ *
  */
 public class Collector implements Runnable {
 

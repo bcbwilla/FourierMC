@@ -9,17 +9,23 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Created by ben on 16/01/15.
+ * ClickData
  *
- * Container for data.
+ * Container for clicking data.
  * Basically just wraps an ArrayDeque
  * and adds some extra methods.
+ *
+ * This object represents a clicking signal, e.g.
+ * [0,0,1,0,2,1,0,1] etc., where each element represents
+ * the number of clicks that occurred during that
+ * sampling interval.
  *
  */
 public class ClickData {
 
     private ArrayDeque<Integer> data = new ArrayDeque<Integer>();
 
+    /* Maximum number of sample periods to store */
     private int MAX_DATA_LENGTH = 127;
 
     private long samplePeriod;
@@ -98,8 +104,9 @@ public class ClickData {
         return new StandardDeviation().evaluate(toDoubleArray());
     }
 
+    /* There is also a formal test for this, but leaving this here for now as well */
     public double clicksPerSecond() {
-        // samplePeriod is in ticks, so need to convert to seconds.
+        /* samplePeriod is in ticks, so need to convert to seconds. */
         return sum() / (samplePeriod*data.size())*20;
     }
 

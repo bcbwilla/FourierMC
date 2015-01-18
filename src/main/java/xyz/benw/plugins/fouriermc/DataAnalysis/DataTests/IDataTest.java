@@ -1,11 +1,13 @@
 package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
 
 /**
- * Created by ben on 17/01/15.
+ * IDataTest
+ *
+ * Interface for all tests on clicking data.
  */
 public interface IDataTest {
 
-    // Evaluate the test
+    /* Evaluate the test */
     public boolean evaluate();
 
 }

@@ -8,7 +8,11 @@ import xyz.benw.plugins.fouriermc.ClickData;
 
 
 /**
- * Created by ben on 17/01/15.
+ * FourierTransform
+ *
+ * Performs a fourier transform on the data to
+ * search for strong frequencies
+ *
  */
 public class FourierTransform implements IDataTest {
 

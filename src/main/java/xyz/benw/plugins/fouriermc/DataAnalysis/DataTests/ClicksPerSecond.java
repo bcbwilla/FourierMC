@@ -1,11 +1,12 @@
 package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
 
 import xyz.benw.plugins.fouriermc.ClickData;
-import xyz.benw.plugins.fouriermc.FourierMC;
-
 
 /**
- * Created by ben on 17/01/15.
+ * ClicksPerSecond
+ *
+ * Computes a player's clicks per second.
+ *
  */
 public class ClicksPerSecond implements IDataTest {
 

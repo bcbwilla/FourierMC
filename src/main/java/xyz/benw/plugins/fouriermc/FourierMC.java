@@ -10,14 +10,19 @@ import xyz.benw.plugins.fouriermc.DataAnalysis.QuantitativeAnalyzer;
 import java.util.*;
 
 /**
- * Created by ben on 15/01/15.
+ * FourierMC
+ *
+ * A Minecraft Bukkit plugin which provides techniques for
+ * detecting suspicious clicking activity.
+ *
  */
 public class FourierMC extends JavaPlugin implements Listener {
 
+    /* Each player's clicking signal */
     public HashMap<UUID, ClickData> clickLogger = new HashMap<UUID, ClickData>();
 
     private long checkInterval; // How often to run an analysis on data
-    private long samplePeriod; // How often (in ticks) between counting clicks
+    private long samplePeriod;  // Time (in ticks) between each sample.
 
     @Override
     public void onEnable(){
@@ -26,18 +31,19 @@ public class FourierMC extends JavaPlugin implements Listener {
         samplePeriod = getConfig().getLong("sampleperiod");
 
         getServer().getPluginManager().registerEvents(new ClickListener(this), this);
-        getLogger().info("Periodically awesome. Sample Period:" + samplePeriod);
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
-        // Counts clicks between every samplePeriod
+        /* Counts clicks between every samplePeriod */
         scheduler.scheduleSyncRepeatingTask(this, new Collector(this), 0L, samplePeriod);
 
-        // Performs analysis every checkInterval
+        /* Logs some basic descriptive statistics */
         scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
 
-        // Performs analysis every checkInterval
+        /* Performs analysis every checkInterval */
         scheduler.scheduleSyncRepeatingTask(this, new QuantitativeAnalyzer(this), 0L, checkInterval);
+
+        getLogger().info("Periodically awesome.");
     }
 
     @Override

@@ -8,7 +8,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.*;
 
 /**
- * Created by ben on 15/01/15.
+ * ClickListener
+ *
+ * General event listener for plugin
+ *
  */
 public class ClickListener implements Listener {
 
@@ -19,6 +22,7 @@ public class ClickListener implements Listener {
     }
 
 
+    /* Logs clicking events */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
 
