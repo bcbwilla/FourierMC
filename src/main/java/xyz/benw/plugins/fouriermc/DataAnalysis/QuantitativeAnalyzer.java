@@ -2,7 +2,8 @@ package xyz.benw.plugins.fouriermc.DataAnalysis;
 
 import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.FourierTransform;
+import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
+import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 
 import java.util.Map;
@@ -34,8 +35,8 @@ public class QuantitativeAnalyzer implements Runnable {
                 // Tests players for clicking too quickly
                 boolean passedCPS = new ClicksPerSecond(data, plugin.getSamplePeriod()).evaluate();
 
-                // Do FourierTransform
-                boolean passedFFT = new FourierTransform(data).evaluate();
+                // Do PatternDetection
+                boolean passedFFT = new PatternDetection(data, PatternDetectionMethod.FISHER).evaluate();
 
                 // Log stuff if failed, etc.
             }

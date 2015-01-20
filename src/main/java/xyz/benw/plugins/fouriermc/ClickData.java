@@ -34,6 +34,18 @@ public class ClickData {
         this.samplePeriod = samplePeriod;
     }
 
+    /*
+        Convenience constructor to build ClickData from array.
+        Mostly for testing purposes.
+     */
+    public ClickData(long samplePeriod, Integer[] array) {
+        this.samplePeriod = samplePeriod;
+
+        for(Integer val : array) {
+            data.add(val);
+        }
+    }
+
 
     public void add(int x) {
         if(data.size() > MAX_DATA_LENGTH) {
