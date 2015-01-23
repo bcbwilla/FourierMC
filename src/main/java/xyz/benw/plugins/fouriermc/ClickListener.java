@@ -25,28 +25,25 @@ public class ClickListener implements Listener {
     /* Logs clicking events */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-
         UUID playerID = event.getPlayer().getUniqueId();
 
         if(plugin.clickLogger.containsKey(playerID)) {
             plugin.clickLogger.get(playerID).increment();
         }
 
-
     }
-
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-
         UUID playerID = event.getPlayer().getUniqueId();
 
         if(plugin.clickLogger.containsKey(playerID)) {
             plugin.clickLogger.remove(playerID);
         }
+
+        if(plugin.violationLogger.containsKey(playerID)) {
+            plugin.clickLogger.remove(playerID);
+        }
     }
-
-
-
 
 }
