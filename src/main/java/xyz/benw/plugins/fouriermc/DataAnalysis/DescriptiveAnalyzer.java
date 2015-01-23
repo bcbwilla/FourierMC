@@ -1,7 +1,12 @@
 package xyz.benw.plugins.fouriermc.DataAnalysis;
 
+import org.bukkit.Bukkit;
 import xyz.benw.plugins.fouriermc.ClickData;
+import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.FourierMC;
+
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Descriptive Analyzer
@@ -19,19 +24,27 @@ public class DescriptiveAnalyzer implements Runnable {
 
     @Override
     public void run() {
-
         if(!plugin.clickLogger.isEmpty()){
 
-            for(ClickData data : plugin.clickLogger.values()) {
+            for (Map.Entry<UUID, ClickData> entry : plugin.clickLogger.entrySet()) {
+                UUID playerId = entry.getKey();
+                ClickData data = entry.getValue();
+                String name = Bukkit.getPlayer(playerId).getDisplayName();
 
                 if(!data.isEmpty()) {
-                    plugin.getLogger().info("Descriptive Analysis:");
-                    plugin.getLogger().info(" Size: " + Integer.toString(data.size()));
-                    plugin.getLogger().info(" Max:  " + Integer.toString(data.max()));
-                    plugin.getLogger().info(" Mean: " + Double.toString(data.mean()));
-                    plugin.getLogger().info(" Sum:  " + Double.toString(data.sum()));
-                    plugin.getLogger().info(" Std:  " + Double.toString(data.standardDeviation()));
-                    plugin.getLogger().info(" CPS:  " + Double.toString(data.clicksPerSecond()));
+
+                    double sum = data.sum();
+                    if(sum != 0) {
+                        double cps = new ClicksPerSecond(data.toDoubleArray(), plugin.getSamplePeriod()).getClicksPerSecond();
+
+                        plugin.getLogger().info("Descriptive Analysis for " + name + ":");
+                        plugin.getLogger().info(" Size: " + Integer.toString(data.size()));
+                        plugin.getLogger().info(" Max:  " + Integer.toString(data.max()));
+                        plugin.getLogger().info(" Mean: " + Double.toString(data.mean()));
+                        plugin.getLogger().info(" Sum:  " + Double.toString(sum));
+                        plugin.getLogger().info(" Std:  " + Double.toString(data.standardDeviation()));
+                        plugin.getLogger().info(" CPS:  " + cps);
+                    }
                 }
             }
         }
