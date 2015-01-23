@@ -12,6 +12,7 @@ public class ClicksPerSecond implements IDataTest {
     private double[] data;
 
     private Long samplePeriod;
+    private double clicksPerSecond;
 
     /**
      * Class constructor.
@@ -25,7 +26,7 @@ public class ClicksPerSecond implements IDataTest {
     }
 
     /**
-     * Evaluates the clicks per second test.
+     * Computes clicks per second and compares to criteria.
      *
      * @param criteria the value which is compared to the computed click speed. If computed value is larger,
      *                 the test is failed.
@@ -34,16 +35,7 @@ public class ClicksPerSecond implements IDataTest {
      */
     @Override
     public boolean evaluate(double criteria) {
-        return getClicksPerSecond() < criteria;
-    }
 
-    /**
-     * Computes clicks per second, averaged over the entire data array
-     *
-     * @return the clicks per second value
-     */
-    public double getClicksPerSecond() {
-        double clicksPerSecond;
         // *20 to convert from ticks to seconds
         int size = data.length;
         if(samplePeriod != 0 && size != 0) {
@@ -51,6 +43,13 @@ public class ClicksPerSecond implements IDataTest {
         } else {
             clicksPerSecond = 0.0;
         }
+        return clicksPerSecond < criteria;
+    }
+
+    /**
+     * @return the clicks per second value
+     */
+    public double getClicksPerSecond() {
         return clicksPerSecond;
     }
 
