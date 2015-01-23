@@ -10,10 +10,9 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TestDataTests
- *
  * Unit tests for the data analysis tests
  *
+ * @author bcbwilla
  */
 public class TestDataTests {
 
@@ -137,11 +136,13 @@ public class TestDataTests {
     }
 
 
-    /*
-        Makes periodic vector of 0s and 1s.
-
-        e.g. period = 2 -> [1, 0, 1, 0, 1, 0, 1, 0, ...]
-             period = 3 -> [1, 0, 0, 1, 0, 0, 1, 0, ...]
+    /**
+     * Generate periodic array of 0s and 1s.
+     * @param period  the period of the signal
+     *                e.g. period = 2 -> [1, 0, 1, 0, 1, 0, 1, 0, ...]
+     *                     period = 3 -> [1, 0, 0, 1, 0, 0, 1, 0, ...]
+     * @param length  the length of the array
+     * @return
      */
     private double[] makePeriodicArray(int period, int length) {
 
@@ -157,9 +158,14 @@ public class TestDataTests {
         return p;
     }
 
+    /**
+     * Generate array of random 0s and 1s
+     * @param length  the length of the array
+     * @return
+     */
     private double[] makeRandomArray(int length) {
 
-        Random r = new Random(1L);
+        Random r = new Random(1L); // Set seed so test is reproducible
         double[] p = new double[length];
 
         for(int i=0; i < p.length; i++){

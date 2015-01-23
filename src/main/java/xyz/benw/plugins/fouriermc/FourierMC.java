@@ -2,9 +2,6 @@ package xyz.benw.plugins.fouriermc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DescriptiveAnalyzer;
@@ -16,9 +13,10 @@ import java.util.*;
 /**
  * FourierMC
  *
- * A Minecraft Bukkit plugin which provides techniques for
- * detecting suspicious clicking activity.
+ * A Minecraft Bukkit plugin which provides techniques for detecting suspicious
+ * clicking activity.
  *
+ * @author bcbwilla
  */
 public class FourierMC extends JavaPlugin {
 

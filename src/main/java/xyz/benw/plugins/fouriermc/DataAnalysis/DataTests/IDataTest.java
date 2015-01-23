@@ -1,14 +1,20 @@
 package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
 
 /**
- * IDataTest
- *
  * Interface for all tests on clicking data.
- * A data test tests one specific thing.
+ * Each implementation should perform a specific test.
+ *
+ * @author bcbwilla
  */
 public interface IDataTest {
 
-    /* Evaluate the test */
+    /**
+     * Evaluates a test, comparing a computed property to some criteria.
+     *
+     * @param critera  the value which is compared to the computed property.
+     * @return         true if test passed, false if test failed.
+     *                 A failed test implies suspicious activity.
+     */
     public boolean evaluate(double critera);
 
 }

@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Descriptive Analyzer
+ * Logs descriptive statistics about a player's signal.
+ * Does not actually perform any tests.
+ * Mostly used for debugging.
  *
- * Logs descriptive statistics about a player's signal
- * Does not actually perform any tests
+ * @author bcbwilla
  */
 public class DescriptiveAnalyzer implements Runnable {
 

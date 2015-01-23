@@ -9,17 +9,13 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * ClickData
+ * Container for player clicking data.
+ * Basically just wraps an ArrayDeque and adds some extra methods.
  *
- * Container for clicking data.
- * Basically just wraps an ArrayDeque
- * and adds some extra methods.
+ * The clicking data is stored as, for example, [0,0,1,0,2,1,0,1,...].
+ * Each element represents a samplePeriod, and the value is the number of clicks that occurred in that period.
  *
- * This object represents a clicking signal, e.g.
- * [0,0,1,0,2,1,0,1] etc., where each element represents
- * the number of clicks that occurred during that
- * sampling interval.
- *
+ * @author bcbwilla
  */
 public class ClickData {
 
@@ -27,10 +23,20 @@ public class ClickData {
 
     private final int MAX_DATA_LENGTH;
 
+    /**
+     * Class constructor
+     *
+     * @param maxLength the length of the queue.
+     *                  If more data is added, the queue will "roll over".
+     */
     public ClickData(int maxLength) {
         this.MAX_DATA_LENGTH = maxLength;
     }
 
+    /**
+     * Add an element to the queue.
+     * @param x  the element to add to the queue.
+     */
     public void add(int x) {
         if(data.size() >= MAX_DATA_LENGTH) {
             data.removeFirst();
@@ -38,6 +44,9 @@ public class ClickData {
         data.addLast(x);
     }
 
+    /**
+     * Increment current value (the last value of the queue)
+     */
     public void increment() {
         if(!data.isEmpty()) {
             int current = data.removeLast();
@@ -45,6 +54,10 @@ public class ClickData {
         }
     }
 
+    /**
+     * Increment current value (the last value of the queue) by amount x
+     * @param x the amount to add to current value
+     */
     public void incrementBy(int x) {
         if(!data.isEmpty()) {
             int current = data.removeLast();
@@ -52,15 +65,25 @@ public class ClickData {
         }
     }
 
+    /**
+     * @return true if queue empty
+     */
     public boolean isEmpty() {
         return data.isEmpty();
     }
 
+    /**
+     * @return size of data queue
+     */
     public int size() {
         return data.size();
     }
 
-
+    /**
+     * Dump contents into an Integer array.
+     *
+     * @return clicking data in Integer array
+     */
     public Integer[] toArray() {
         Object[] a = data.toArray();
 
@@ -71,6 +94,11 @@ public class ClickData {
         return out;
     }
 
+    /**
+     * Dump contents into a double array.
+     *
+     * @return clicking data in double array
+     */
     public double[] toDoubleArray() {
         Object[] a = data.toArray();
 
@@ -81,22 +109,39 @@ public class ClickData {
         return out;
     }
 
+    /**
+     * @return the fixed length of the queue
+     */
     public int getMaxLength() {
         return MAX_DATA_LENGTH;
     }
 
+    /* Some convenience methods */
+
+    /**
+     * @return the maximum data value
+     */
     public int max() {
         return Collections.max(Arrays.asList(toArray()));
     }
 
+    /**
+     * @return the sum of the data
+     */
     public double sum() {
         return new Sum().evaluate(toDoubleArray());
     }
 
+    /**
+     * @return the mean of the data
+     */
     public double mean() {
         return new Mean().evaluate(toDoubleArray());
     }
 
+    /**
+     * @return the standard deviation of the data
+     */
     public double standardDeviation() {
         return new StandardDeviation().evaluate(toDoubleArray());
     }
