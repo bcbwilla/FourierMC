@@ -1,11 +1,15 @@
 package xyz.benw.plugins.fouriermc;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DescriptiveAnalyzer;
 import xyz.benw.plugins.fouriermc.DataAnalysis.QuantitativeAnalyzer;
+import xyz.benw.plugins.fouriermc.Violations.Violation;
 
 import java.util.*;
 
@@ -16,19 +20,30 @@ import java.util.*;
  * detecting suspicious clicking activity.
  *
  */
-public class FourierMC extends JavaPlugin implements Listener {
+public class FourierMC extends JavaPlugin {
 
     /* Each player's clicking signal */
-    public HashMap<UUID, ClickData> clickLogger = new HashMap<UUID, ClickData>();
+    public Map<UUID, ClickData> clickLogger = new HashMap<UUID, ClickData>();
+    public Map<UUID, Violation> violationLogger = new HashMap<UUID, Violation>();
 
     private long checkInterval; // How often to run an analysis on data
-    private long samplePeriod;  // Time (in ticks) between each sample.
+    private long samplePeriod;  // Time (in ticks) between each sample
+    private int maxDataLength;  // The length of the data array to analyze
+    private boolean debug;      // Log everything if true
+
 
     @Override
     public void onEnable(){
 
-        checkInterval = getConfig().getLong("checkinterval");
-        samplePeriod = getConfig().getLong("sampleperiod");
+        this.saveDefaultConfig();
+
+        FileConfiguration config = getConfig();
+
+        checkInterval = config.getLong("checkinterval");
+        samplePeriod = config.getLong("sampleperiod");
+        maxDataLength = config.getInt("clickdata.maxdatalength");
+        debug = config.getBoolean("debug");
+
 
         getServer().getPluginManager().registerEvents(new ClickListener(this), this);
 
@@ -37,22 +52,31 @@ public class FourierMC extends JavaPlugin implements Listener {
         /* Counts clicks between every samplePeriod */
         scheduler.scheduleSyncRepeatingTask(this, new Collector(this), 0L, samplePeriod);
 
-        /* Logs some basic descriptive statistics */
-        scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
-
         /* Performs analysis every checkInterval */
         scheduler.scheduleSyncRepeatingTask(this, new QuantitativeAnalyzer(this), 0L, checkInterval);
+
+        if(debug) {
+            /* Logs some basic descriptive statistics */
+            scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
+        }
 
         getLogger().info("Periodically awesome.");
     }
 
     @Override
     public void onDisable(){
-        getLogger().info("Goodbye.");
     }
 
     public long getSamplePeriod() {
         return samplePeriod;
+    }
+
+    public int getMaxDataLength() {
+        return maxDataLength;
+    }
+
+    public boolean getDebug() {
+        return debug;
     }
 
 }
