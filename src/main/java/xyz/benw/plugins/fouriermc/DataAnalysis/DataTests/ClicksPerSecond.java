@@ -1,6 +1,6 @@
 package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
 
-import xyz.benw.plugins.fouriermc.ClickData;
+import org.apache.commons.math3.stat.descriptive.summary.Sum;
 
 /**
  * ClicksPerSecond
@@ -10,23 +10,31 @@ import xyz.benw.plugins.fouriermc.ClickData;
  */
 public class ClicksPerSecond implements IDataTest {
 
-    private ClickData data;
+    private double[] data;
 
-    private double result;
     private Long samplePeriod;
 
 
-    public ClicksPerSecond(ClickData data, Long samplePeriod) {
+    public ClicksPerSecond(double[] data, Long samplePeriod) {
         this.data = data;
         this.samplePeriod = samplePeriod;
     }
 
     @Override
-    public boolean evaluate() {
-        // *20 to convert from ticks to seconds
-        result = data.sum() / (samplePeriod*data.size())*20;
+    public boolean evaluate(double criteria) {
+        return getClicksPerSecond() < criteria;
+    }
 
-        return result < 5;  //TODO: Put test criterias in config
+    public double getClicksPerSecond() {
+        double clicksPerSecond;
+        // *20 to convert from ticks to seconds
+        int size = data.length;
+        if(samplePeriod != 0 && size != 0) {
+            clicksPerSecond = (new Sum().evaluate(data) / (samplePeriod * size)) * 20;
+        } else {
+            clicksPerSecond = 0.0;
+        }
+        return clicksPerSecond;
     }
 
 }
