@@ -1,3 +1,27 @@
-checkinterval: 100
+# The interval at which checks are performed, in ticks.
+checkinterval: 50
+
+# The length of time between which ticks are counted.
 sampleperiod: 1
-maxdatalength: 255
+
+clickdata:
+  # The length of the data array to analyze
+  # Should be a power of 2 so that it works well with the pattern detection test
+  maxdatalength: 512
+
+# if true, log everything
+debug: true
+
+# Parameters for the click data tests
+# These are not optimized nor suggested values
+# You must experiment to figure out what's best
+# for your server.
+tests:
+  cps: 10 # Clicks per second
+
+  # Pattern detection
+  pattern:
+    fisherp: 0.0001  # p value for the fisher-g test (smaller -> more strict)
+    cpscutoff: 7    # value under which pattern detection is not violated
+
+
