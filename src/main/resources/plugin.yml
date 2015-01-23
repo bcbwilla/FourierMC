@@ -1,7 +1,6 @@
 main: xyz.benw.plugins.fouriermc.FourierMC
 name: FourierMC
-version: 1.0.0
+version: 0.0.1
 author: Ben
 website:
-description: Logs Clicks
-commands:
+description: Simple plugin to detect players using autoclickers.
