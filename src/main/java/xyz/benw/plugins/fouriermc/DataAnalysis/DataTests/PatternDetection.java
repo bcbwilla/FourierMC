@@ -7,7 +7,7 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import xyz.benw.plugins.fouriermc.ClickData;
+
 
 
 /**
@@ -19,25 +19,33 @@ import xyz.benw.plugins.fouriermc.ClickData;
  */
 public class PatternDetection implements IDataTest {
 
-    private ClickData data;
+    private double[] data;
 
     private PatternDetectionMethod method;
     private double[] periodogram;
     private double criteria = 0.001;
 
+    private double fisherGValue;
+    private double fisherPValue;
 
-    public PatternDetection(ClickData data, PatternDetectionMethod method) {
+
+    public PatternDetection(double[] data, PatternDetectionMethod method) {
         this.data = data;
         this.method = method;
     }
 
     @Override
-    public boolean evaluate() {
+    public boolean evaluate(double criteria) {
+
+        // No clicking
+        if(new Sum().evaluate(data) == 0) {
+            return true;
+        }
 
         makePeriodogram();
 
         if(method == PatternDetectionMethod.FISHER) {
-            return doFisherTest();
+            return fisherPValue() > criteria;
 
         } else if(method == PatternDetectionMethod.FTEST) {
             // Do something else
@@ -46,11 +54,6 @@ public class PatternDetection implements IDataTest {
         return true;
     }
 
-    private boolean doFisherTest() {
-
-        return fisherPValue() > criteria;
-
-    }
 
     /**
      * Generate a periodogram of the signal.
@@ -60,7 +63,7 @@ public class PatternDetection implements IDataTest {
 
         // Need to insert checks about power of 2, evenness, etc.
         FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-        Complex[] transformed = fft.transform(data.toDoubleArray(), TransformType.FORWARD);
+        Complex[] transformed = fft.transform(data, TransformType.FORWARD);
 
         int upperLimit = (int)(transformed.length/2.0) - 1;
         double[] periodogram = new double[upperLimit];
@@ -72,10 +75,17 @@ public class PatternDetection implements IDataTest {
         this.periodogram = periodogram;
     }
 
+    /**
+     * Use the Fisher g-value to find periodicity in signal.
+     *
+     * See http://www.mathworks.com/help/signal/ug/significance-testing-for-periodic-component.html
+     *
+     */
     private double fisherG() {
 
         double maxVal = new Max().evaluate(periodogram);
-        return maxVal / new Sum().evaluate(periodogram);
+        fisherGValue = maxVal / new Sum().evaluate(periodogram);
+        return fisherGValue;
 
     }
 
@@ -86,14 +96,23 @@ public class PatternDetection implements IDataTest {
 
         int upperLimit = (int) Math.floor(1/fisherG);
 
-        double[] values = new double[N];
+        double[] values = new double[upperLimit];
         for(int k=0; k < upperLimit; k++) {
-            double binomialCo = CombinatoricsUtils.binomialCoefficientDouble(N, k);
-            values[k] = Math.pow(-1, k-1) * binomialCo * Math.pow((1-k*fisherG), N-1);
+            double binomialCo = CombinatoricsUtils.binomialCoefficientDouble(N, k+1);
+            values[k] = Math.pow(-1, k) * binomialCo * Math.pow((1-(k+1)*fisherG), N-1);
         }
 
-        return new Sum().evaluate(values);
+        fisherPValue = new Sum().evaluate(values);
+        return fisherPValue;
 
+    }
+
+    public double getFisherGValue() {
+        return fisherGValue;
+    }
+
+    public double getFisherPValue() {
+        return fisherPValue;
     }
 }
 
