@@ -34,7 +34,7 @@ public class Collector implements Runnable {
                 data.add(0);
 
             } else {
-                plugin.clickLogger.put(playerID, new ClickData(plugin.getSamplePeriod()));
+                plugin.clickLogger.put(playerID, new ClickData(plugin.getMaxDataLength()));
             }
         }
 

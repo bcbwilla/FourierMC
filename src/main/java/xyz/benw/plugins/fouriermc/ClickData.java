@@ -25,35 +25,18 @@ public class ClickData {
 
     private ArrayDeque<Integer> data = new ArrayDeque<Integer>();
 
-    /* Maximum number of sample periods to store */
-    private int MAX_DATA_LENGTH = 127;
+    private final int MAX_DATA_LENGTH;
 
-    private long samplePeriod;
-
-    public ClickData(long samplePeriod) {
-        this.samplePeriod = samplePeriod;
+    public ClickData(int maxLength) {
+        this.MAX_DATA_LENGTH = maxLength;
     }
-
-    /*
-        Convenience constructor to build ClickData from array.
-        Mostly for testing purposes.
-     */
-    public ClickData(long samplePeriod, Integer[] array) {
-        this.samplePeriod = samplePeriod;
-
-        for(Integer val : array) {
-            data.add(val);
-        }
-    }
-
 
     public void add(int x) {
-        if(data.size() > MAX_DATA_LENGTH) {
+        if(data.size() >= MAX_DATA_LENGTH) {
             data.removeFirst();
         }
         data.addLast(x);
     }
-
 
     public void increment() {
         if(!data.isEmpty()) {
@@ -61,7 +44,6 @@ public class ClickData {
             data.addLast(current + 1);
         }
     }
-
 
     public void incrementBy(int x) {
         if(!data.isEmpty()) {
@@ -89,7 +71,6 @@ public class ClickData {
         return out;
     }
 
-
     public double[] toDoubleArray() {
         Object[] a = data.toArray();
 
@@ -98,6 +79,10 @@ public class ClickData {
             out[i] = (double) ((Integer) a[i]).intValue();
         }
         return out;
+    }
+
+    public int getMaxLength() {
+        return MAX_DATA_LENGTH;
     }
 
     public int max() {
@@ -114,12 +99,6 @@ public class ClickData {
 
     public double standardDeviation() {
         return new StandardDeviation().evaluate(toDoubleArray());
-    }
-
-    /* There is also a formal test for this, but leaving this here for now as well */
-    public double clicksPerSecond() {
-        /* samplePeriod is in ticks, so need to convert to seconds. */
-        return sum() / (samplePeriod*data.size())*20;
     }
 
 }

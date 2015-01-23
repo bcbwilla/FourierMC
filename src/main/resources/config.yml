@@ -7,7 +7,7 @@ sampleperiod: 1
 clickdata:
   # The length of the data array to analyze
   # Should be a power of 2 so that it works well with the pattern detection test
-  maxdatalength: 512
+  maxdatalength: 256
 
 # if true, log everything
 debug: true
