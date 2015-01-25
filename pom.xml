@@ -19,6 +19,16 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
         </dependency>
+	    <dependency>
+		    <groupId>tc.oc</groupId>
+		    <artifactId>sportbukkit-api</artifactId>
+		    <version>1.7.10-R0.1-SNAPSHOT</version>
+	    </dependency>
+	    <dependency>
+		    <groupId>tc.oc</groupId>
+		    <artifactId>sportbukkit</artifactId>
+		    <version>1.7.10-R0.1-SNAPSHOT</version>
+	    </dependency>
     </dependencies>
 
 </project>
