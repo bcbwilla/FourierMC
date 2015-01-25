@@ -58,7 +58,7 @@ public class FourierMC extends JavaPlugin {
             scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
         }
 
-        getLogger().info("Periodically awesome.");
+        getLogger().info("Periodically awesome. [ALPHA - testing only]");
     }
 
     @Override
