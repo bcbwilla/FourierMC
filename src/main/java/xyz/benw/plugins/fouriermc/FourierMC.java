@@ -21,7 +21,7 @@ import java.util.*;
 public class FourierMC extends JavaPlugin {
 
     /* Each player's clicking signal */
-    public Map<UUID, ClickData> clickLogger = new HashMap<UUID, ClickData>();
+    public Map<UUID, IClickData> clickLogger = new HashMap<UUID, IClickData>();
     public Map<UUID, Violation> violationLogger = new HashMap<UUID, Violation>();
 
     private long checkInterval; // How often to run an analysis on data

@@ -2,11 +2,11 @@ package xyz.benw.plugins.fouriermc.DataAnalysis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
+import xyz.benw.plugins.fouriermc.IClickData;
 import xyz.benw.plugins.fouriermc.Violations.Violation;
 
 import java.util.Arrays;
@@ -45,9 +45,9 @@ public class QuantitativeAnalyzer implements Runnable {
             double pdCpsCutoff = config.getDouble("tests.pattern.cpscutoff");
 
             /* Test each player */
-            for (Map.Entry<UUID, ClickData> entry : plugin.clickLogger.entrySet()) {
+            for (Map.Entry<UUID, IClickData> entry : plugin.clickLogger.entrySet()) {
                 UUID playerId = entry.getKey();
-                ClickData data = entry.getValue();
+                IClickData data = entry.getValue();
                 String name = Bukkit.getPlayer(playerId).getDisplayName();
 
                 Violation violation;

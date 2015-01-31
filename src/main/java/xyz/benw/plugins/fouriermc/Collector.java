@@ -33,7 +33,7 @@ public class Collector implements Runnable {
             UUID playerID = player.getUniqueId();
 
             if(plugin.clickLogger.containsKey(playerID)) {
-                ClickData data = plugin.clickLogger.get(playerID);
+                IClickData data = plugin.clickLogger.get(playerID);
                 data.add(0);
 
             } else {
