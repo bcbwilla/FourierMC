@@ -7,6 +7,7 @@ import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
+import xyz.benw.plugins.fouriermc.SignalLogger;
 import xyz.benw.plugins.fouriermc.Violations.Violation;
 
 import java.util.Arrays;
@@ -88,8 +89,10 @@ public class QuantitativeAnalyzer implements Runnable {
 
                     }
 
+                    if(plugin.getLogSignals()) {
+                    SignalLogger.log(plugin, dataArray, playerId);
+                    };
                 }
-
             }
         }
     }

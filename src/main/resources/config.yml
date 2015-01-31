@@ -9,8 +9,11 @@ clickdata:
   # Should be a power of 2 so that it works well with the pattern detection test
   maxdatalength: 256
 
-# if true, log everything
+# Log everything
 debug: true
+
+# Log player clicking signals to csv file for later analysis
+logsignals: true
 
 # Parameters for the click data tests
 # These are not optimized nor suggested values

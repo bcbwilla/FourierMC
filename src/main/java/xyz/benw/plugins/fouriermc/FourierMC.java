@@ -28,6 +28,7 @@ public class FourierMC extends JavaPlugin {
     private long samplePeriod;  // Time (in ticks) between each sample
     private int maxDataLength;  // The length of the data array to analyze
     private boolean debug;      // Log everything if true
+    private boolean logSignals; // Log clicking signals to file
 
 
     @Override
@@ -41,6 +42,7 @@ public class FourierMC extends JavaPlugin {
         samplePeriod = config.getLong("sampleperiod");
         maxDataLength = config.getInt("clickdata.maxdatalength");
         debug = config.getBoolean("debug");
+        logSignals = config.getBoolean("logsignals");
 
 
         getServer().getPluginManager().registerEvents(new ClickListener(this), this);
@@ -71,6 +73,10 @@ public class FourierMC extends JavaPlugin {
 
     public int getMaxDataLength() {
         return maxDataLength;
+    }
+
+    public boolean getLogSignals() {
+        return logSignals;
     }
 
     public boolean getDebug() {
