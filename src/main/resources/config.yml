@@ -1,7 +1,7 @@
 # The interval at which checks are performed, in ticks.
 checkinterval: 50
 
-# The length of time between which ticks are counted.
+# The length of time between which clicks are counted.
 sampleperiod: 1
 
 clickdata:
