@@ -8,11 +8,12 @@ import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
 import xyz.benw.plugins.fouriermc.SignalLogger;
-import xyz.benw.plugins.fouriermc.Violations.Violation;
+import xyz.benw.plugins.fouriermc.Violations.CPSViolation;
+import xyz.benw.plugins.fouriermc.Violations.IViolation;
+import xyz.benw.plugins.fouriermc.Violations.PatternViolation;
+import xyz.benw.plugins.fouriermc.Violations.ViolationType;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Performs pass/fail tests on player's clicking signal.
@@ -51,12 +52,12 @@ public class QuantitativeAnalyzer implements Runnable {
                 IClickData data = entry.getValue();
                 String name = Bukkit.getPlayer(playerId).getDisplayName();
 
-                Violation violation;
+                Map violationMap;
                 if(plugin.violationLogger.containsKey(playerId)) {
-                    violation = plugin.violationLogger.get(playerId);
+                    violationMap = plugin.violationLogger.get(playerId);
                 } else {
-                    violation = new Violation();
-                    plugin.violationLogger.put(playerId, violation);
+                    violationMap = new HashMap<ViolationType, IViolation>();
+                    plugin.violationLogger.put(playerId, violationMap);
                 }
 
                 if(!data.isEmpty()) {
@@ -70,8 +71,16 @@ public class QuantitativeAnalyzer implements Runnable {
                     boolean passedCPS = cps.evaluate(cpsCritera);
                     double cpsValue = cps.getClicksPerSecond();
 
+                    CPSViolation cpsViolation;
                     if(!passedCPS) {
-                        violation.incrementCPS(cpsValue);
+                        if(violationMap.containsKey(ViolationType.CPS)) {
+                            cpsViolation = (CPSViolation) violationMap.get(ViolationType.CPS);
+                        } else {
+                            cpsViolation = new CPSViolation();
+                            violationMap.put(ViolationType.CPS, cpsViolation);
+                        }
+
+                        cpsViolation.incrementValue(cpsValue);
                         plugin.getLogger().info(name + " failed CPS with a value of " + cpsValue);
 
                     }
@@ -82,8 +91,17 @@ public class QuantitativeAnalyzer implements Runnable {
                         boolean passedPD = pd.evaluate(fisherCriteria);
 
                         if(!passedPD) {
+
+                            PatternViolation patternViolation;
+                            if(violationMap.containsKey(ViolationType.PATTERN)) {
+                                patternViolation = (PatternViolation) violationMap.get(ViolationType.PATTERN);
+                            } else {
+                                patternViolation = new PatternViolation();
+                                violationMap.put(ViolationType.CPS, patternViolation);
+                            }
+
                             double value = pd.getFisherPValue();
-                            violation.incrementPD(value/fisherCriteria);
+                            patternViolation.incrementValue(value / fisherCriteria);
                             plugin.getLogger().info(name + " failed PD with a value of " + value);
                         }
 
