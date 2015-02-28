@@ -4,3 +4,7 @@ version: 0.0.1
 author: Ben
 website:
 description: Simple plugin to detect players using autoclickers.
+commands:
+   fmc:
+      description: Base command
+      usage: /<command> [arg]

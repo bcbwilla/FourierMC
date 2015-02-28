@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import xyz.benw.plugins.fouriermc.Commands.ConfigCommands;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DescriptiveAnalyzer;
 import xyz.benw.plugins.fouriermc.DataAnalysis.QuantitativeAnalyzer;
 import xyz.benw.plugins.fouriermc.Violations.ViolationType;
@@ -60,6 +61,8 @@ public class FourierMC extends JavaPlugin {
             /* Logs some basic descriptive statistics */
             scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
         }
+
+        this.getCommand("fmc").setExecutor(new ConfigCommands(this));
 
         getLogger().info("Periodically awesome. [ALPHA - testing only]");
     }
