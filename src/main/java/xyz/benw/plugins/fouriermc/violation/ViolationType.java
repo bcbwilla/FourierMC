@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.Violations;
+package xyz.benw.plugins.fouriermc.violation;
 
 /**
  *  Types of violations

@@ -1,11 +1,11 @@
-package xyz.benw.plugins.fouriermc.DataAnalysis;
+package xyz.benw.plugins.fouriermc.dataanalysis;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.descriptive.rank.Max;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.bukkit.Bukkit;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
 

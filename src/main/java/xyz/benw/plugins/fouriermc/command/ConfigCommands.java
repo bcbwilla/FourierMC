@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.Commands;
+package xyz.benw.plugins.fouriermc.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

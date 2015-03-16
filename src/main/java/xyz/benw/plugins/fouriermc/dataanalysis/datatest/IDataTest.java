@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
+package xyz.benw.plugins.fouriermc.dataanalysis.datatest;
 
 /**
  * Interface for all tests on clicking data.

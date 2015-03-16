@@ -1,15 +1,15 @@
-package xyz.benw.plugins.fouriermc.DataAnalysis;
+package xyz.benw.plugins.fouriermc.dataanalysis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetection;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
-import xyz.benw.plugins.fouriermc.Violations.*;
+import xyz.benw.plugins.fouriermc.violation.*;
 import xyz.benw.plugins.fouriermc.event.violation.AggregatedViolationEvent;
 import xyz.benw.plugins.fouriermc.event.violation.ViolationEvent;
 

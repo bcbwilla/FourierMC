@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.Violations;
+package xyz.benw.plugins.fouriermc.violation;
 
 /**
  * A failed clicking test results in a violation

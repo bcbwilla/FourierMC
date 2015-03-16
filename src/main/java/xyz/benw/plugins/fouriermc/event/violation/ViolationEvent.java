@@ -3,7 +3,7 @@ package xyz.benw.plugins.fouriermc.event.violation;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import xyz.benw.plugins.fouriermc.Violations.Violation;
+import xyz.benw.plugins.fouriermc.violation.Violation;
 
 
 /**

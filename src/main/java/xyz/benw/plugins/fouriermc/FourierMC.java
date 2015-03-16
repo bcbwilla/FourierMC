@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import xyz.benw.plugins.fouriermc.Commands.ConfigCommands;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DescriptiveAnalyzer;
-import xyz.benw.plugins.fouriermc.DataAnalysis.QuantitativeAnalyzer;
-import xyz.benw.plugins.fouriermc.Violations.Violation;
-import xyz.benw.plugins.fouriermc.Violations.ViolationListener;
-import xyz.benw.plugins.fouriermc.Violations.ViolationType;
+import xyz.benw.plugins.fouriermc.command.ConfigCommands;
+import xyz.benw.plugins.fouriermc.dataanalysis.DescriptiveAnalyzer;
+import xyz.benw.plugins.fouriermc.dataanalysis.QuantitativeAnalyzer;
+import xyz.benw.plugins.fouriermc.violation.Violation;
+import xyz.benw.plugins.fouriermc.violation.ViolationListener;
+import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.Violations;
+package xyz.benw.plugins.fouriermc.violation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.DataAnalysis.DataTests;
+package xyz.benw.plugins.fouriermc.dataanalysis.datatest;
 
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 

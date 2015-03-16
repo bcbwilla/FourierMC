@@ -1,9 +1,9 @@
 package xyz.benw.plugins.fouriermc;
 
 import org.junit.*;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
-import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetection;
+import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetectionMethod;
 
 import java.util.Random;
 
