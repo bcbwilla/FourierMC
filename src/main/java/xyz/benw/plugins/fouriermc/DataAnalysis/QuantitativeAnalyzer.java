@@ -2,16 +2,16 @@ package xyz.benw.plugins.fouriermc.DataAnalysis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetection;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DataTests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
-import xyz.benw.plugins.fouriermc.SignalLogger;
-import xyz.benw.plugins.fouriermc.Violations.CPSViolation;
-import xyz.benw.plugins.fouriermc.Violations.IViolation;
-import xyz.benw.plugins.fouriermc.Violations.PatternViolation;
-import xyz.benw.plugins.fouriermc.Violations.ViolationType;
+import xyz.benw.plugins.fouriermc.Violations.*;
+import xyz.benw.plugins.fouriermc.event.violation.AggregatedViolationEvent;
+import xyz.benw.plugins.fouriermc.event.violation.ViolationEvent;
 
 import java.util.*;
 
@@ -42,23 +42,20 @@ public class QuantitativeAnalyzer implements Runnable {
 
             FileConfiguration config = plugin.getConfig();
 
-            double cpsCritera = config.getDouble("tests.cps");
+            double cpsCritera = config.getDouble("tests.cps.value");
             double fisherCriteria = config.getDouble("tests.pattern.fisherp");
             double pdCpsCutoff = config.getDouble("tests.pattern.cpscutoff");
 
+            PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+
+
             /* Test each player */
             for (Map.Entry<UUID, IClickData> entry : plugin.clickLogger.entrySet()) {
-                UUID playerId = entry.getKey();
+                UUID playerID = entry.getKey();
                 IClickData data = entry.getValue();
-                String name = Bukkit.getPlayer(playerId).getDisplayName();
+                String name = Bukkit.getPlayer(playerID).getDisplayName();
 
-                Map violationMap;
-                if(plugin.violationLogger.containsKey(playerId)) {
-                    violationMap = plugin.violationLogger.get(playerId);
-                } else {
-                    violationMap = new HashMap<ViolationType, IViolation>();
-                    plugin.violationLogger.put(playerId, violationMap);
-                }
+                Player player = Bukkit.getPlayer(playerID);
 
                 if(!data.isEmpty()) {
 
@@ -71,18 +68,11 @@ public class QuantitativeAnalyzer implements Runnable {
                     boolean passedCPS = cps.evaluate(cpsCritera);
                     double cpsValue = cps.getClicksPerSecond();
 
-                    CPSViolation cpsViolation;
                     if(!passedCPS) {
-                        if(violationMap.containsKey(ViolationType.CPS)) {
-                            cpsViolation = (CPSViolation) violationMap.get(ViolationType.CPS);
-                        } else {
-                            cpsViolation = new CPSViolation();
-                            violationMap.put(ViolationType.CPS, cpsViolation);
-                        }
 
-                        cpsViolation.incrementValue(cpsValue);
-                        plugin.getLogger().info(name + " failed CPS with a value of " + cpsValue);
-
+                        Violation violation = new Violation(ViolationType.CPS, cpsValue);
+                        ViolationEvent event = new ViolationEvent(player, violation);
+                        pluginManager.callEvent(event);
                     }
 
                     if(cpsValue > pdCpsCutoff  && data.size() == data.getMaxLength()) { // PD is more useful over longer periods
@@ -91,25 +81,53 @@ public class QuantitativeAnalyzer implements Runnable {
                         boolean passedPD = pd.evaluate(fisherCriteria);
 
                         if(!passedPD) {
-
-                            PatternViolation patternViolation;
-                            if(violationMap.containsKey(ViolationType.PATTERN)) {
-                                patternViolation = (PatternViolation) violationMap.get(ViolationType.PATTERN);
-                            } else {
-                                patternViolation = new PatternViolation();
-                                violationMap.put(ViolationType.CPS, patternViolation);
-                            }
-
-                            double value = pd.getFisherPValue();
-                            patternViolation.incrementValue(value / fisherCriteria);
-                            plugin.getLogger().info(name + " failed PD with a value of " + value);
+                            Violation violation = new Violation(ViolationType.PATTERN, pd.getFisherPValue());
+                            ViolationEvent event = new ViolationEvent(player, violation);
+                            pluginManager.callEvent(event);
                         }
 
                     }
 
-                    if(plugin.getLogSignals()) {
-                    SignalLogger.log(plugin, dataArray, playerId);
-                    };
+
+                    /* Handle aggregated violations */
+                    for(ViolationType violationType : ViolationType.values()) {
+
+                        Map violationMap;
+                        if(plugin.violationLogger.containsKey(playerID)) {
+                            violationMap = plugin.violationLogger.get(playerID);
+
+                            List violationList;
+                            if (violationMap.containsKey(violationType)) {
+                                violationList = (ArrayList) violationMap.get(violationType);
+
+                                int timesFailed = violationList.size();
+                                Violation firstViolation = (Violation) violationList.get(0);
+                                Violation lastViolation = (Violation) violationList.get(timesFailed-1);
+
+                                int failedDuration = (int) (lastViolation.getTimestamp() - firstViolation.getTimestamp());
+
+                                double failedVelocity = 0;
+                                if(failedDuration > 0.0) {
+                                    failedVelocity = ((double) timesFailed / failedDuration) * 1000.0 * 60;
+                                }
+
+                                String configPath = "tests." + violationType.toString().toLowerCase() + ".velocity";
+                                double criteria = config.getDouble(configPath);
+
+                                if(failedVelocity > criteria) {
+                                    AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
+                                    AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
+                                    pluginManager.callEvent(event);
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
                 }
             }
         }

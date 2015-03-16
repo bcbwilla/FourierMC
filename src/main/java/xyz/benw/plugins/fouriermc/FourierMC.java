@@ -7,8 +7,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 import xyz.benw.plugins.fouriermc.Commands.ConfigCommands;
 import xyz.benw.plugins.fouriermc.DataAnalysis.DescriptiveAnalyzer;
 import xyz.benw.plugins.fouriermc.DataAnalysis.QuantitativeAnalyzer;
+import xyz.benw.plugins.fouriermc.Violations.Violation;
+import xyz.benw.plugins.fouriermc.Violations.ViolationListener;
 import xyz.benw.plugins.fouriermc.Violations.ViolationType;
-import xyz.benw.plugins.fouriermc.Violations.IViolation;
 
 import java.util.*;
 
@@ -24,7 +25,10 @@ public class FourierMC extends JavaPlugin {
 
     /* Each player's clicking signal */
     public Map<UUID, IClickData> clickLogger = new HashMap<UUID, IClickData>();
-    public Map<UUID, Map<ViolationType, IViolation>> violationLogger = new HashMap<UUID, Map<ViolationType, IViolation>>();
+
+    /* Each player's violation information */
+    public Map<UUID, Map<ViolationType, List<Violation>>> violationLogger = new HashMap<UUID, Map<ViolationType, List<Violation>>>();
+
 
     private long checkInterval; // How often to run an analysis on data
     private long samplePeriod;  // Time (in ticks) between each sample
@@ -48,6 +52,7 @@ public class FourierMC extends JavaPlugin {
 
 
         getServer().getPluginManager().registerEvents(new ClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new ViolationListener(this), this);
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 
