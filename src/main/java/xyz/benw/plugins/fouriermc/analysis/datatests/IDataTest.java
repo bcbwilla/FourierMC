@@ -1,7 +1,7 @@
-package xyz.benw.plugins.fouriermc.dataanalysis.datatest;
+package xyz.benw.plugins.fouriermc.analysis.datatests;
 
 /**
- * Interface for all tests on clicking data.
+ * Interface for all datatests on clicking data.
  * Each implementation should perform a specific test.
  *
  * @author bcbwilla

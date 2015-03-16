@@ -1,11 +1,11 @@
-package xyz.benw.plugins.fouriermc.dataanalysis;
+package xyz.benw.plugins.fouriermc.analysis;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.descriptive.rank.Max;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.bukkit.Bukkit;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /**
  * Logs descriptive statistics about a player's signal.
- * Does not actually perform any tests.
+ * Does not actually perform any datatests.
  * Mostly used for debugging.
  *
  * @author bcbwilla

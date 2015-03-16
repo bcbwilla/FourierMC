@@ -5,7 +5,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 /**
- * Runs tests
+ * Runs datatests
  */
 public class TestRunner {
     public static void main(String[] args) {

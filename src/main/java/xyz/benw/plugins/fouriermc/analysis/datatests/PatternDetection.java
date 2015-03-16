@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.dataanalysis.datatest;
+package xyz.benw.plugins.fouriermc.analysis.datatests;
 
 import org.apache.commons.math3.stat.descriptive.rank.Max;
 import org.apache.commons.math3.complex.Complex;

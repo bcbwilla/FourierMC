@@ -1,4 +1,4 @@
-package xyz.benw.plugins.fouriermc.dataanalysis.datatest;
+package xyz.benw.plugins.fouriermc.analysis.datatests;
 
 /**
  * The method to use for computing pattern detection.

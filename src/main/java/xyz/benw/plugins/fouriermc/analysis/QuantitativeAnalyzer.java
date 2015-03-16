@@ -1,12 +1,12 @@
-package xyz.benw.plugins.fouriermc.dataanalysis;
+package xyz.benw.plugins.fouriermc.analysis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetection;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetectionMethod;
+import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetection;
+import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
 import xyz.benw.plugins.fouriermc.violation.*;
@@ -16,7 +16,7 @@ import xyz.benw.plugins.fouriermc.event.violation.ViolationEvent;
 import java.util.*;
 
 /**
- * Performs pass/fail tests on player's clicking signal.
+ * Performs pass/fail datatests on player's clicking signal.
  * Check for clicking too quickly (ClicksPerSecond) and artificially (PatternDetection).
  *
  * @author bcbwilla
@@ -34,7 +34,7 @@ public class QuantitativeAnalyzer implements Runnable {
     }
 
     /**
-     * Run the tests.
+     * Run the datatests.
      */
     @Override
     public void run() {

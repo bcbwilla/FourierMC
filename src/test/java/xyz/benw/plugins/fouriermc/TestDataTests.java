@@ -1,16 +1,16 @@
 package xyz.benw.plugins.fouriermc;
 
 import org.junit.*;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.ClicksPerSecond;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetection;
-import xyz.benw.plugins.fouriermc.dataanalysis.datatest.PatternDetectionMethod;
+import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
+import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetection;
+import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetectionMethod;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for the data analysis tests
+ * Unit datatests for the data analysis datatests
  *
  * @author bcbwilla
  */
