@@ -1,13 +1,14 @@
 package xyz.benw.plugins.fouriermc.violation;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.event.violation.AggregatedViolationEvent;
 import xyz.benw.plugins.fouriermc.event.violation.ViolationEvent;
 
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Listens for violation and aggregated violation events
@@ -54,9 +55,12 @@ public class ViolationListener implements Listener {
 
         violationList.add(violation);
 
-        String msg = event.getPlayer().getDisplayName() + " logged a ";
-        msg += violationType.toString() + " value of " + violation.getValue();
-        Bukkit.getServer().broadcastMessage(msg);
+
+        if(plugin.getDebug()) {
+            String msg = event.getPlayer().getDisplayName() + " logged a ";
+            msg += violationType.toString() + " value of " + violation.getValue();
+            plugin.getLogger().log(Level.INFO, msg);
+        }
 
     }
 
@@ -68,19 +72,21 @@ public class ViolationListener implements Listener {
     public void onAggregatedViolation(AggregatedViolationEvent event) {
 
         boolean log = plugin.getConfig().getBoolean("tests.logAggregated");
-        Bukkit.getServer().broadcastMessage("Aggregated violation");
+
         if(log) {
             String playerName = event.getPlayer().getDisplayName();
 
             AggregatedViolation av = event.getAggregatedViolation();
             String violationType = av.getViolationType().toString();
             String timesFailed = Integer.toString(av.getTimesFailed());
-            String failedDuration = Double.toString(av.getfailedDuration() / 60.0);
 
-            String msg = "Player " + playerName + "failed " + violationType + " " + timesFailed;
-            msg += " times in the past " + failedDuration + " minutes.";
+            DecimalFormat df = new DecimalFormat("0.00");
+            String failedDuration = df.format(av.getfailedDuration() / (1000.0));
 
-            Bukkit.getServer().broadcastMessage(msg);
+            String msg = "Player " + playerName + " failed " + violationType + " " + timesFailed;
+            msg += " times in the past " + failedDuration + " seconds.";
+
+            plugin.getLogger().log(Level.INFO, msg);
         }
 
     }
