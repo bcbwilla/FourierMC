@@ -100,27 +100,29 @@ public class QuantitativeAnalyzer implements Runnable {
                             if (violationMap.containsKey(violationType)) {
                                 violationList = (ArrayList) violationMap.get(violationType);
 
-                                int timesFailed = violationList.size();
-                                Violation firstViolation = (Violation) violationList.get(0);
-                                Violation lastViolation = (Violation) violationList.get(timesFailed-1);
+                                if(!violationList.isEmpty()) {
+                                    int timesFailed = violationList.size();
+                                    Violation firstViolation = (Violation) violationList.get(0);
+                                    Violation lastViolation = (Violation) violationList.get(timesFailed-1);
 
-                                int failedDuration = (int) (lastViolation.getTimestamp() - firstViolation.getTimestamp());
+                                    int failedDuration = (int) (lastViolation.getTimestamp() - firstViolation.getTimestamp());
 
-                                double failedVelocity = 0;
-                                if(failedDuration > 0.0) {
-                                    failedVelocity = ((double) timesFailed / failedDuration) * 1000.0 * 60;
+                                    double failedVelocity = 0;
+                                    if(failedDuration > 0.0) {
+                                        failedVelocity = ((double) timesFailed / failedDuration) * 1000.0 * 60;
+                                    }
+
+                                    String configPath = "tests." + violationType.toString().toLowerCase() + ".velocity";
+                                    double criteria = config.getDouble(configPath);
+
+                                    if(failedVelocity > criteria) {
+                                        AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
+                                        AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
+                                        pluginManager.callEvent(event);
+                                        violationList.clear();
+                                    }
+
                                 }
-
-                                String configPath = "tests." + violationType.toString().toLowerCase() + ".velocity";
-                                double criteria = config.getDouble(configPath);
-
-                                if(failedVelocity > criteria) {
-                                    AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
-                                    AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
-                                    pluginManager.callEvent(event);
-
-                                }
-
                             }
 
                         }
