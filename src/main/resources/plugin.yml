@@ -8,3 +8,10 @@ commands:
    fmc:
       description: Base command
       usage: /<command> [arg]
+permissions:
+    fouriermc.*:
+        description: Give access to all fouriermc commands
+        children:
+            fouriermc.fmc:
+                description: Base command
+                default: op
