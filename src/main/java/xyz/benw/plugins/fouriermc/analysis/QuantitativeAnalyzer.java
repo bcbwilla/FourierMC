@@ -9,6 +9,7 @@ import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetection;
 import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetectionMethod;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
+import xyz.benw.plugins.fouriermc.player.PlayerData;
 import xyz.benw.plugins.fouriermc.violation.*;
 import xyz.benw.plugins.fouriermc.event.violation.AggregatedViolationEvent;
 import xyz.benw.plugins.fouriermc.event.violation.ViolationEvent;
@@ -40,7 +41,7 @@ public class QuantitativeAnalyzer implements Runnable {
      */
     @Override
     public void run() {
-        if(!plugin.clickLogger.isEmpty()) {
+        if(!plugin.getPlayerDataMap().isEmpty()) {
 
             FileConfiguration config = plugin.getConfig();
 
@@ -49,9 +50,9 @@ public class QuantitativeAnalyzer implements Runnable {
             double pdCpsCutoff = config.getDouble("tests.pattern.cpscutoff");
 
             /* Test each player */
-            for (Map.Entry<UUID, IClickData> entry : plugin.clickLogger.entrySet()) {
+            for (Map.Entry<UUID, PlayerData> entry : plugin.getPlayerDataMap().entrySet()) {
                 UUID playerID = entry.getKey();
-                IClickData data = entry.getValue();
+                IClickData data = entry.getValue().getClickSignal();
 
                 Player player = Bukkit.getPlayer(playerID);
 
@@ -102,9 +103,9 @@ public class QuantitativeAnalyzer implements Runnable {
      * @param violationType violation type
      */
     private void handleAggregatedViolations(Player player, ViolationType violationType) {
-        UUID playerId = player.getUniqueId();
 
-        List violationList = plugin.getViolations(playerId, violationType);
+        List violationList = plugin.getPlayerData(player.getUniqueId()).getViolations(violationType);
+
         if (violationList != null) {
 
             int timesFailed = violationList.size();

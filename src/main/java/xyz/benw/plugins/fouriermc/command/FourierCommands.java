@@ -1,7 +1,5 @@
 package xyz.benw.plugins.fouriermc.command;
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,8 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import xyz.benw.plugins.fouriermc.FourierMC;
-import xyz.benw.plugins.fouriermc.violation.Violation;
-import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
 import java.util.*;
 

@@ -6,6 +6,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import xyz.benw.plugins.fouriermc.player.PlayerData;
 
 import java.util.*;
 
@@ -33,15 +34,14 @@ public class ClickListener implements Listener {
      */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        UUID playerID = event.getPlayer().getUniqueId();
+        UUID playerId = event.getPlayer().getUniqueId();
         Action action = event.getAction();
         
         /* Ignore physical and right click actions from increasing the click logger. */
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             /* Each click increments the value corresponding to the current sample period. */
-            if (plugin.clickLogger.containsKey(playerID)) {
-                plugin.clickLogger.get(playerID).increment();
-            }
+
+            plugin.getPlayerData(playerId).getClickSignal().increment();
         }
     }
     
@@ -51,12 +51,10 @@ public class ClickListener implements Listener {
      */
     @EventHandler
     public void onPlayerPlace(BlockPlaceEvent event) {
-    	UUID playerID = event.getPlayer().getUniqueId();
+    	UUID playerId = event.getPlayer().getUniqueId();
     	
         /* Each click increments the value corresponding to the current sample period. */
-        if (plugin.clickLogger.containsKey(playerID)) {
-        	plugin.clickLogger.get(playerID).increment();
-        }
+        plugin.getPlayerData(playerId).getClickSignal().increment();
     }
 
     /**
@@ -65,10 +63,11 @@ public class ClickListener implements Listener {
      */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        UUID playerID = event.getPlayer().getUniqueId();
+        UUID playerId = event.getPlayer().getUniqueId();
 
-        if (plugin.clickLogger.containsKey(playerID) || plugin.violationLogger.containsKey(playerID)) {
-            plugin.clickLogger.remove(playerID);
+        Map<UUID, PlayerData> playerDataMap = plugin.getPlayerDataMap();
+        if (playerDataMap.containsKey(playerId)) {
+            playerDataMap.remove(playerId);
         }
     }
 

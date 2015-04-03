@@ -7,9 +7,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import xyz.benw.plugins.fouriermc.command.FourierCommands;
 import xyz.benw.plugins.fouriermc.analysis.DescriptiveAnalyzer;
 import xyz.benw.plugins.fouriermc.analysis.QuantitativeAnalyzer;
-import xyz.benw.plugins.fouriermc.violation.Violation;
+import xyz.benw.plugins.fouriermc.player.PlayerData;
 import xyz.benw.plugins.fouriermc.violation.ViolationListener;
-import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
 import java.util.*;
 
@@ -23,11 +22,7 @@ import java.util.*;
  */
 public class FourierMC extends JavaPlugin {
 
-    /* Each player's clicking signal */
-    public Map<UUID, IClickData> clickLogger = new HashMap<UUID, IClickData>();
-
-    /* Each player's violation information */
-    public Map<UUID, Map<ViolationType, List<Violation>>> violationLogger = new HashMap<UUID, Map<ViolationType, List<Violation>>>();
+    private Map<UUID, PlayerData> playerDataMap = new HashMap<UUID, PlayerData>();
 
 
     private long checkInterval; // How often to run an analysis on data
@@ -92,19 +87,17 @@ public class FourierMC extends JavaPlugin {
         return debug;
     }
 
-    public ArrayList<Violation> getViolations(UUID playerId, ViolationType violationType) {
+    public Map<UUID, PlayerData> getPlayerDataMap() {
+        return playerDataMap;
+    }
 
-        if(this.violationLogger.containsKey(playerId)) {
-            Map violationMap = this.violationLogger.get(playerId);
-
-            if(violationMap.containsKey(violationType)) {
-                ArrayList violationList = (ArrayList) violationMap.get(violationType);
-
-                if(!violationList.isEmpty()) {
-                    return violationList;
-                }
-            }
+    public PlayerData getPlayerData(UUID playerId) {
+        if(playerDataMap.containsKey(playerId)) {
+            return playerDataMap.get(playerId);
+        } else {
+            PlayerData pd = new PlayerData(this);
+            this.playerDataMap.put(playerId, pd);
+            return pd;
         }
-        return null;
     }
 }

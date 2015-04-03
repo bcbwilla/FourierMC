@@ -33,28 +33,11 @@ public class ViolationListener implements Listener {
      */
     @EventHandler
     public void onViolation(ViolationEvent event) {
-        UUID playerID = event.getPlayer().getUniqueId();
+        UUID playerId = event.getPlayer().getUniqueId();
         Violation violation = event.getViolation();
         ViolationType violationType = violation.getViolationType();
 
-        Map violationMap;
-        if(plugin.violationLogger.containsKey(playerID)) {
-            violationMap = plugin.violationLogger.get(playerID);
-        } else {
-            violationMap = new HashMap<ViolationType, ArrayList<Violation>>();
-            plugin.violationLogger.put(playerID, violationMap);
-        }
-
-        List violationList;
-        if(violationMap.containsKey(violationType)) {
-            violationList = (ArrayList) violationMap.get(violationType);
-        } else {
-            violationList = new ArrayList<Violation>();
-            violationMap.put(violationType, violationList);
-        }
-
-        violationList.add(violation);
-
+        plugin.getPlayerData(playerId).addViolation(violationType, violation);
 
         if(plugin.getDebug()) {
             String msg = event.getPlayer().getDisplayName() + " logged a ";
@@ -70,20 +53,22 @@ public class ViolationListener implements Listener {
      */
     @EventHandler
     public void onAggregatedViolation(AggregatedViolationEvent event) {
+        UUID playerId = event.getPlayer().getUniqueId();
+        AggregatedViolation av = event.getAggregatedViolation();
+        ViolationType violationType = av.getViolationType();
+
+        plugin.getPlayerData(playerId).addAggregatedViolation(violationType, av);
 
         boolean log = plugin.getConfig().getBoolean("tests.logAggregated");
 
         if(log) {
             String playerName = event.getPlayer().getDisplayName();
-
-            AggregatedViolation av = event.getAggregatedViolation();
-            String violationType = av.getViolationType().toString();
             String timesFailed = Integer.toString(av.getTimesFailed());
 
             DecimalFormat df = new DecimalFormat("0.00");
             String failedDuration = df.format(av.getfailedDuration() / (1000.0));
 
-            String msg = "Player " + playerName + " failed " + violationType + " " + timesFailed;
+            String msg = "Player " + playerName + " failed " + violationType.toString() + " " + timesFailed;
             msg += " times in the past " + failedDuration + " seconds.";
 
             plugin.getLogger().log(Level.INFO, msg);

@@ -30,15 +30,8 @@ public class Collector implements Runnable {
     public void run() {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            UUID playerID = player.getUniqueId();
-
-            if(plugin.clickLogger.containsKey(playerID)) {
-                IClickData data = plugin.clickLogger.get(playerID);
-                data.add(0);
-
-            } else {
-                plugin.clickLogger.put(playerID, new ClickData(plugin.getMaxDataLength()));
-            }
+            UUID playerId = player.getUniqueId();
+            plugin.getPlayerData(playerId).getClickSignal().add(0);
         }
 
     }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
+import xyz.benw.plugins.fouriermc.player.PlayerData;
 
 import java.util.Map;
 import java.util.UUID;
@@ -29,11 +30,11 @@ public class DescriptiveAnalyzer implements Runnable {
 
     @Override
     public void run() {
-        if(!plugin.clickLogger.isEmpty()){
+        if(!plugin.getPlayerDataMap().isEmpty()){
 
-            for (Map.Entry<UUID, IClickData> entry : plugin.clickLogger.entrySet()) {
+            for (Map.Entry<UUID, PlayerData> entry : plugin.getPlayerDataMap().entrySet()) {
                 UUID playerId = entry.getKey();
-                IClickData data = entry.getValue();
+                IClickData data = entry.getValue().getClickSignal();
                 String name = Bukkit.getPlayer(playerId).getDisplayName();
 
                 if(!data.isEmpty()) {
