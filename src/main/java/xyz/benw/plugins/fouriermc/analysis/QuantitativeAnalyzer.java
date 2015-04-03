@@ -24,6 +24,7 @@ import java.util.*;
 public class QuantitativeAnalyzer implements Runnable {
 
     private FourierMC plugin;
+    private PluginManager pluginManager;
 
     /**
      * Class constructor.
@@ -31,6 +32,7 @@ public class QuantitativeAnalyzer implements Runnable {
      */
     public QuantitativeAnalyzer(FourierMC plugin) {
         this.plugin = plugin;
+        this.pluginManager = Bukkit.getServer().getPluginManager();
     }
 
     /**
@@ -45,9 +47,6 @@ public class QuantitativeAnalyzer implements Runnable {
             double cpsCritera = config.getDouble("tests.cps.value");
             double fisherCriteria = config.getDouble("tests.pattern.fisherp");
             double pdCpsCutoff = config.getDouble("tests.pattern.cpscutoff");
-
-            PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-
 
             /* Test each player */
             for (Map.Entry<UUID, IClickData> entry : plugin.clickLogger.entrySet()) {
@@ -88,51 +87,59 @@ public class QuantitativeAnalyzer implements Runnable {
 
                     }
 
-
                     /* Handle aggregated violations */
                     for(ViolationType violationType : ViolationType.values()) {
-
-                        Map violationMap;
-                        if(plugin.violationLogger.containsKey(playerID)) {
-                            violationMap = plugin.violationLogger.get(playerID);
-
-                            List violationList;
-                            if (violationMap.containsKey(violationType)) {
-                                violationList = (ArrayList) violationMap.get(violationType);
-
-                                if(!violationList.isEmpty()) {
-                                    int timesFailed = violationList.size();
-                                    Violation firstViolation = (Violation) violationList.get(0);
-                                    Violation lastViolation = (Violation) violationList.get(timesFailed-1);
-
-                                    int failedDuration = (int) (lastViolation.getTimestamp() - firstViolation.getTimestamp());
-
-                                    double failedVelocity = 0;
-                                    if(failedDuration > 0.0) {
-                                        failedVelocity = ((double) timesFailed / failedDuration) * 1000.0 * 60;
-                                    }
-
-                                    String configPath = "tests." + violationType.toString().toLowerCase() + ".velocity";
-                                    double criteria = config.getDouble(configPath);
-
-                                    if(failedVelocity > criteria) {
-                                        AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
-                                        AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
-                                        pluginManager.callEvent(event);
-                                        violationList.clear();
-                                    }
-
-                                }
-                            }
-
-                        }
-
+                        handleAggregatedViolations(player, violationType);
                     }
-
 
                 }
             }
         }
+    }
+
+    /**
+     * Handled aggregated violations
+     * @param player Player triggering violation
+     * @param violationType violation type
+     */
+    private void handleAggregatedViolations(Player player, ViolationType violationType) {
+        UUID playerID = player.getUniqueId();
+
+        Map violationMap;
+        if(plugin.violationLogger.containsKey(playerID)) {
+            violationMap = plugin.violationLogger.get(playerID);
+
+            List violationList;
+            if (violationMap.containsKey(violationType)) {
+                violationList = (ArrayList) violationMap.get(violationType);
+
+                if(!violationList.isEmpty()) {
+                    int timesFailed = violationList.size();
+                    Violation firstViolation = (Violation) violationList.get(0);
+                    Violation lastViolation = (Violation) violationList.get(timesFailed-1);
+
+                    int failedDuration = (int) (lastViolation.getTimestamp() - firstViolation.getTimestamp());
+
+                    double failedVelocity = 0;
+                    if(failedDuration > 0.0) {
+                        failedVelocity = ((double) timesFailed / failedDuration) * 1000.0 * 60;
+                    }
+
+                    String configPath = "tests." + violationType.toString().toLowerCase() + ".velocity";
+                    double criteria = plugin.getConfig().getDouble(configPath);
+
+                    if(failedVelocity > criteria) {
+                        AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
+                        AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
+                        pluginManager.callEvent(event);
+                        violationList.clear();
+                    }
+
+                }
+            }
+
+        }
+
     }
 
 }
