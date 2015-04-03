@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import xyz.benw.plugins.fouriermc.command.ConfigCommands;
+import xyz.benw.plugins.fouriermc.command.FourierCommands;
 import xyz.benw.plugins.fouriermc.analysis.DescriptiveAnalyzer;
 import xyz.benw.plugins.fouriermc.analysis.QuantitativeAnalyzer;
 import xyz.benw.plugins.fouriermc.violation.Violation;
@@ -67,7 +67,7 @@ public class FourierMC extends JavaPlugin {
             scheduler.scheduleSyncRepeatingTask(this, new DescriptiveAnalyzer(this), 0L, 500L);
         }
 
-        this.getCommand("fmc").setExecutor(new ConfigCommands(this));
+        this.getCommand("fmc").setExecutor(new FourierCommands(this));
 
         getLogger().info("Periodically awesome. [ALPHA - testing only]");
     }
@@ -92,4 +92,19 @@ public class FourierMC extends JavaPlugin {
         return debug;
     }
 
+    public ArrayList<Violation> getViolations(UUID playerId, ViolationType violationType) {
+
+        if(this.violationLogger.containsKey(playerId)) {
+            Map violationMap = this.violationLogger.get(playerId);
+
+            if(violationMap.containsKey(violationType)) {
+                ArrayList violationList = (ArrayList) violationMap.get(violationType);
+
+                if(!violationList.isEmpty()) {
+                    return violationList;
+                }
+            }
+        }
+        return null;
+    }
 }
