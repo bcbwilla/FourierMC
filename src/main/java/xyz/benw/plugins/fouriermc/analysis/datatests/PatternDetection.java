@@ -136,6 +136,21 @@ public class PatternDetection implements IDataTest {
         return fisherPValue;
     }
 
+    /**
+     * Scales violation value to more human understandable range
+     * @return violation value
+     */
+    public double getValue() {
+        double pValue = getFisherPValue();
+
+        if(pValue != 0) {
+            return Math.log10(1.0 / pValue);
+        } else {
+            return 0.0;
+        }
+
+    }
+
     //TODO Implement F-Test cross validation
 }
 

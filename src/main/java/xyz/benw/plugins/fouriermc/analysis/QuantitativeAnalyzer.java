@@ -80,7 +80,7 @@ public class QuantitativeAnalyzer implements Runnable {
                         boolean passedPD = pd.evaluate(fisherCriteria);
 
                         if(!passedPD) {
-                            Violation violation = new Violation(ViolationType.PATTERN, pd.getFisherPValue());
+                            Violation violation = new Violation(ViolationType.PATTERN, pd.getValue());
                             ViolationEvent event = new ViolationEvent(player, violation);
                             pluginManager.callEvent(event);
                         }
