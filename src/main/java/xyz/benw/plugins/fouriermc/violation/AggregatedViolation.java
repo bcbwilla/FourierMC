@@ -5,7 +5,7 @@ package xyz.benw.plugins.fouriermc.violation;
  *
  * @author bcbwilla
  */
-public class AggregatedViolation {
+public class AggregatedViolation extends AbstractViolation {
 
     private ViolationType violationType;
     private int timesFailed;
@@ -27,14 +27,6 @@ public class AggregatedViolation {
         if(failedDuration != 0) {
             this.failedVelocity = (timesFailed / failedDuration) * 1000.0; // Convert ms to seconds
         }
-    }
-
-    public void setViolationType(ViolationType violationType) {
-        this.violationType = violationType;
-    }
-
-    public ViolationType getViolationType() {
-        return violationType;
     }
 
     public int getTimesFailed() {
