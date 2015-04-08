@@ -16,4 +16,5 @@ public class AbstractViolation {
     public void setViolationType(ViolationType violationType) {
         this.violationType = violationType;
     }
+
 }

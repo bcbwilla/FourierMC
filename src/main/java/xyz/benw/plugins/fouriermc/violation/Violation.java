@@ -10,6 +10,7 @@ public class Violation extends AbstractViolation {
     private ViolationType violationType;
     private double value;
     private Long timestamp;
+    private boolean active = true;
 
     public Violation(ViolationType violationType, double value) {
         this.violationType = violationType;
@@ -28,6 +29,14 @@ public class Violation extends AbstractViolation {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean set) {
+        active = set;
     }
 
 }

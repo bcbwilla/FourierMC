@@ -31,3 +31,5 @@ tests:
     fisherp: 0.0001  # p value for the fisher-g test (smaller -> more strict)
     cpscutoff: 7    # value under which pattern detection is not violated
     velocity: 1 # allowed test fails per minute
+
+violationExpireAge: 60  # 60 seconds

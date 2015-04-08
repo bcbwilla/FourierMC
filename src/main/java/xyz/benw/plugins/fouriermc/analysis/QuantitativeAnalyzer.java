@@ -104,7 +104,13 @@ public class QuantitativeAnalyzer implements Runnable {
      */
     private void handleAggregatedViolations(Player player, ViolationType violationType) {
 
-        List violationList = plugin.getPlayerData(player.getUniqueId()).getViolations(violationType);
+        FileConfiguration config = plugin.getConfig();
+
+        PlayerData playerData = plugin.getPlayerData(player.getUniqueId());
+
+        playerData.expireViolations(config.getInt("violationExpireAge"));
+
+        List violationList = playerData.getViolations(violationType, true);
 
         if (violationList != null) {
 
