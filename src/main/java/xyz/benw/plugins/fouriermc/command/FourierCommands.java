@@ -1,5 +1,6 @@
 package xyz.benw.plugins.fouriermc.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,6 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import xyz.benw.plugins.fouriermc.FourierMC;
+import xyz.benw.plugins.fouriermc.player.PlayerData;
+import xyz.benw.plugins.fouriermc.violation.AbstractViolation;
+import xyz.benw.plugins.fouriermc.violation.AggregatedViolation;
+import xyz.benw.plugins.fouriermc.violation.Violation;
+import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
 import java.util.*;
 
@@ -56,6 +62,34 @@ public class FourierCommands implements CommandExecutor {
                 plugin.reloadConfig();
                 sender.sendMessage("Reloaded config for FourierMC.");
                 return true;
+
+
+            } else if(args.length == 2 && args[0].equalsIgnoreCase("info")) {
+
+                String nameString = args[1];
+                UUID targetID = Bukkit.getPlayer(nameString).getUniqueId(); // Is there a better way to do this?
+
+                PlayerData playerData = plugin.getPlayerData(targetID);
+
+                String msg = ChatColor.UNDERLINE + "Violation Report for " + nameString + "\n ";
+                for(ViolationType vt : ViolationType.values()) {
+
+                    double velocity = 0;
+                    int timesFailed = 0;
+                    for(AggregatedViolation av : playerData.getAggregatedViolations(vt)) {
+                        timesFailed += av.getTimesFailed();
+                        velocity += av.getFailedVelocity();
+                    }
+
+                    msg += vt.name() + ": \n";
+                    msg += "  Times Failed: " + Integer.toString(timesFailed) + "\n";
+                    msg += "  Velocity: " + Double.toString(velocity) + "\n\n";
+
+                }
+
+                sender.sendMessage(msg);
+                return true;
+
             }
 
         }
