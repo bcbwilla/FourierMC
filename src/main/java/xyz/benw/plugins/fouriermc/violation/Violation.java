@@ -5,7 +5,7 @@ package xyz.benw.plugins.fouriermc.violation;
  *
  * @author bcbwilla
  */
-public class Violation extends AbstractViolation {
+public class Violation extends BaseViolation {
 
     private ViolationType violationType;
     private double value;
@@ -13,7 +13,7 @@ public class Violation extends AbstractViolation {
     private boolean active = true;
 
     public Violation(ViolationType violationType, double value) {
-        this.violationType = violationType;
+        super(violationType);
         this.value = value;
 
         this.timestamp = System.currentTimeMillis();

@@ -2,7 +2,6 @@ package xyz.benw.plugins.fouriermc.player;
 
 import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.FourierMC;
-import xyz.benw.plugins.fouriermc.violation.AbstractViolation;
 import xyz.benw.plugins.fouriermc.violation.AggregatedViolation;
 import xyz.benw.plugins.fouriermc.violation.Violation;
 import xyz.benw.plugins.fouriermc.violation.ViolationType;
@@ -81,13 +80,17 @@ public class PlayerData {
 
         for(ViolationType vt : ViolationType.values()) {
 
-            for(Violation v : getViolations(vt, true)) {
-                int age = (int) (System.currentTimeMillis() - v.getTimestamp());
+            ArrayList<Violation> violationList = getViolations(vt, true);
 
-                if(age > expireAge*1000) {
-                    v.setActive(false);
+            if(violationList != null) {
+                for(Violation v : getViolations(vt, true)) {
+                    int age = (int) (System.currentTimeMillis() - v.getTimestamp());
+
+                    if(age > expireAge*1000) {
+                        v.setActive(false);
+                    }
+
                 }
-
             }
         }
     }

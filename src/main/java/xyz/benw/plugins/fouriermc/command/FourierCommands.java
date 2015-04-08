@@ -9,9 +9,7 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.player.PlayerData;
-import xyz.benw.plugins.fouriermc.violation.AbstractViolation;
 import xyz.benw.plugins.fouriermc.violation.AggregatedViolation;
-import xyz.benw.plugins.fouriermc.violation.Violation;
 import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
 import java.util.*;
@@ -71,20 +69,27 @@ public class FourierCommands implements CommandExecutor {
 
                 PlayerData playerData = plugin.getPlayerData(targetID);
 
-                String msg = ChatColor.UNDERLINE + "Violation Report for " + nameString + "\n ";
+                String msg = ChatColor.DARK_PURPLE + "Violation Report for " + nameString;
+                msg += ChatColor.RESET + "\n";
                 for(ViolationType vt : ViolationType.values()) {
 
                     double velocity = 0;
                     int timesFailed = 0;
-                    for(AggregatedViolation av : playerData.getAggregatedViolations(vt)) {
-                        timesFailed += av.getTimesFailed();
-                        velocity += av.getFailedVelocity();
+
+                    List<AggregatedViolation> violationList = playerData.getAggregatedViolations(vt);
+
+                    if(violationList != null) {
+                        for(AggregatedViolation av : playerData.getAggregatedViolations(vt)) {
+                            timesFailed += av.getTimesFailed();
+                            velocity += av.getFailedVelocity();
+                        }
+
+                        msg += vt.name() + ": \n";
+                        msg += "  Times Failed: " + Integer.toString(timesFailed) + "\n";
+                        msg += "  Velocity: " + Double.toString(velocity) + "\n\n";
+                    } else {
+                        msg += ChatColor.DARK_GREEN + " No violations found.";
                     }
-
-                    msg += vt.name() + ": \n";
-                    msg += "  Times Failed: " + Integer.toString(timesFailed) + "\n";
-                    msg += "  Velocity: " + Double.toString(velocity) + "\n\n";
-
                 }
 
                 sender.sendMessage(msg);

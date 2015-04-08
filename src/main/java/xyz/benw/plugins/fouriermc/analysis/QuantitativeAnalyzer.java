@@ -112,7 +112,7 @@ public class QuantitativeAnalyzer implements Runnable {
 
         List violationList = playerData.getViolations(violationType, true);
 
-        if (violationList != null) {
+        if (violationList != null && violationList.size() > 0) {
 
             int timesFailed = violationList.size();
             Violation firstViolation = (Violation) violationList.get(0);
@@ -132,7 +132,11 @@ public class QuantitativeAnalyzer implements Runnable {
                 AggregatedViolation aggregatedViolation = new AggregatedViolation(violationType, timesFailed, failedDuration);
                 AggregatedViolationEvent event = new AggregatedViolationEvent(player, aggregatedViolation);
                 pluginManager.callEvent(event);
-                violationList.clear();
+
+                // Mark aggregated violations as not active
+                for(int i = 0; i < timesFailed; i++) {
+                    ((Violation) violationList.get(i)).setActive(false);
+                }
 
             }
 

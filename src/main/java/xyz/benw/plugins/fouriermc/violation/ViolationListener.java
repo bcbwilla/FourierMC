@@ -41,7 +41,7 @@ public class ViolationListener implements Listener {
 
         if(plugin.getDebug()) {
             String msg = event.getPlayer().getDisplayName() + " logged a ";
-            msg += violationType.toString() + " value of " + violation.getValue();
+            msg += violationType.toString() + " value of " + Double.toString(violation.getValue());
             plugin.getLogger().log(Level.INFO, msg);
         }
 
