@@ -64,7 +64,7 @@ public class FourierMC extends JavaPlugin {
 
         this.getCommand("fmc").setExecutor(new FourierCommands(this));
 
-        getLogger().info("Periodically awesome. [ALPHA - testing only]");
+        getLogger().info("Periodically awesome. [ALPHA - testing only?]");
     }
 
     @Override

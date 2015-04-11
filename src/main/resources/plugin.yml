@@ -1,6 +1,6 @@
 main: xyz.benw.plugins.fouriermc.FourierMC
 name: FourierMC
-version: 0.0.1
+version: 0.0.2
 author: Ben
 website:
 description: Simple plugin to detect players using autoclickers.
