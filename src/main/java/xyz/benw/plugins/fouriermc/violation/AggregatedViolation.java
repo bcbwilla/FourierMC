@@ -26,7 +26,7 @@ public class AggregatedViolation extends BaseViolation {
 
         this.failedVelocity = 0;
         if(failedDuration != 0) {
-            this.failedVelocity = (timesFailed / failedDuration) * 1000.0; // Convert ms to seconds
+            this.failedVelocity = ((double) timesFailed / failedDuration) * 1000.0; // Convert ms to seconds
         }
     }
 
