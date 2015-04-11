@@ -69,8 +69,9 @@ public class FourierCommands implements CommandExecutor {
 
                 PlayerData playerData = plugin.getPlayerData(targetID);
 
-                String msg = ChatColor.DARK_PURPLE + "Violation Report for " + nameString;
-                msg += ChatColor.RESET + "\n";
+                sender.sendMessage(ChatColor.DARK_PURPLE + "Violation Report for " + nameString);
+
+                String msg = "";
                 for(ViolationType vt : ViolationType.values()) {
 
                     double velocity = 0;
@@ -79,7 +80,7 @@ public class FourierCommands implements CommandExecutor {
                     List<AggregatedViolation> violationList = playerData.getAggregatedViolations(vt);
 
                     if(violationList != null) {
-                        for(AggregatedViolation av : playerData.getAggregatedViolations(vt)) {
+                        for(AggregatedViolation av : violationList) {
                             timesFailed += av.getTimesFailed();
                             velocity += av.getFailedVelocity();
                         }
@@ -87,12 +88,13 @@ public class FourierCommands implements CommandExecutor {
                         msg += vt.name() + ": \n";
                         msg += "  Times Failed: " + Integer.toString(timesFailed) + "\n";
                         msg += "  Velocity: " + Double.toString(velocity) + "\n\n";
-                    } else {
-                        msg += ChatColor.DARK_GREEN + " No violations found.";
+
                     }
                 }
 
+                msg = (msg == "") ? ChatColor.DARK_GREEN + " No violations found." : msg;
                 sender.sendMessage(msg);
+
                 return true;
 
             }
