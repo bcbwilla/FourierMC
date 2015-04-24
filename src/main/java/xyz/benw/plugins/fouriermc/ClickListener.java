@@ -41,7 +41,7 @@ public class ClickListener implements Listener {
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             /* Each click increments the value corresponding to the current sample period. */
 
-            plugin.getPlayerData(playerId).getClickSignal().increment();
+            plugin.getPlayerData(playerId).getLeftClickSignal().increment();
         }
     }
     
@@ -54,7 +54,7 @@ public class ClickListener implements Listener {
     	UUID playerId = event.getPlayer().getUniqueId();
     	
         /* Each click increments the value corresponding to the current sample period. */
-        plugin.getPlayerData(playerId).getClickSignal().increment();
+        plugin.getPlayerData(playerId).getRightClickSignal().increment();
     }
 
     /**

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetection;
 import xyz.benw.plugins.fouriermc.analysis.datatests.PatternDetectionMethod;
@@ -52,46 +53,48 @@ public class QuantitativeAnalyzer implements Runnable {
             /* Test each player */
             for (Map.Entry<UUID, PlayerData> entry : plugin.getPlayerDataMap().entrySet()) {
                 UUID playerID = entry.getKey();
-                IClickData data = entry.getValue().getClickSignal();
 
-                Player player = Bukkit.getPlayer(playerID);
+                for(ClickData data : entry.getValue().getClickSignals()) {
 
-                if(!data.isEmpty()) {
+                    Player player = Bukkit.getPlayer(playerID);
 
-                    double[] dataArray = data.toDoubleArray();
+                    if(!data.isEmpty()) {
 
-                    int n = dataArray.length;
-                    double[] halfArray = Arrays.copyOfRange(dataArray, n/2, n); //CPS is more useful over shorter periods
+                        double[] dataArray = data.toDoubleArray();
 
-                    ClicksPerSecond cps = new ClicksPerSecond(halfArray, plugin.getSamplePeriod());
-                    boolean passedCPS = cps.evaluate(cpsCritera);
-                    double cpsValue = cps.getClicksPerSecond();
+                        int n = dataArray.length;
+                        double[] halfArray = Arrays.copyOfRange(dataArray, n/2, n); //CPS is more useful over shorter periods
 
-                    if(!passedCPS) {
+                        ClicksPerSecond cps = new ClicksPerSecond(halfArray, plugin.getSamplePeriod());
+                        boolean passedCPS = cps.evaluate(cpsCritera);
+                        double cpsValue = cps.getClicksPerSecond();
 
-                        Violation violation = new Violation(ViolationType.CPS, cpsValue);
-                        ViolationEvent event = new ViolationEvent(player, violation);
-                        pluginManager.callEvent(event);
-                    }
+                        if(!passedCPS) {
 
-                    if(cpsValue > pdCpsCutoff  && data.size() == data.getMaxLength()) { // PD is more useful over longer periods
-                        // Do PatternDetection
-                        PatternDetection pd = new PatternDetection(dataArray, PatternDetectionMethod.FISHER);
-                        boolean passedPD = pd.evaluate(fisherCriteria);
-
-                        if(!passedPD) {
-                            Violation violation = new Violation(ViolationType.PATTERN, pd.getValue());
+                            Violation violation = new Violation(ViolationType.CPS, cpsValue, data.getClickType());
                             ViolationEvent event = new ViolationEvent(player, violation);
                             pluginManager.callEvent(event);
                         }
 
-                    }
+                        if(cpsValue > pdCpsCutoff  && data.size() == data.getMaxLength()) { // PD is more useful over longer periods
+                            // Do PatternDetection
+                            PatternDetection pd = new PatternDetection(dataArray, PatternDetectionMethod.FISHER);
+                            boolean passedPD = pd.evaluate(fisherCriteria);
 
-                    /* Handle aggregated violations */
-                    for(ViolationType violationType : ViolationType.values()) {
-                        handleAggregatedViolations(player, violationType);
-                    }
+                            if(!passedPD) {
+                                Violation violation = new Violation(ViolationType.PATTERN, pd.getValue(), data.getClickType());
+                                ViolationEvent event = new ViolationEvent(player, violation);
+                                pluginManager.callEvent(event);
+                            }
 
+                        }
+
+                        /* Handle aggregated violations */
+                        for(ViolationType violationType : ViolationType.values()) {
+                            handleAggregatedViolations(player, violationType);
+                        }
+
+                    }
                 }
             }
         }

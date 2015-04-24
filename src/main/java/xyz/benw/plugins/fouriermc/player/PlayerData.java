@@ -3,6 +3,7 @@ package xyz.benw.plugins.fouriermc.player;
 import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.violation.AggregatedViolation;
+import xyz.benw.plugins.fouriermc.violation.ClickType;
 import xyz.benw.plugins.fouriermc.violation.Violation;
 import xyz.benw.plugins.fouriermc.violation.ViolationType;
 
@@ -24,7 +25,8 @@ public class PlayerData {
     private Map<ViolationType, List<AggregatedViolation>> aggregatedViolations = new HashMap<ViolationType, List<AggregatedViolation>>();
 
     /* Player's clicking signal data */
-    public ClickData clickSignal;
+    private ClickData leftClickSignal;
+    private ClickData rightClickSignal;
 
     /**
      * Class constructor.
@@ -32,7 +34,8 @@ public class PlayerData {
      */
     public PlayerData(FourierMC plugin) {
         this.plugin = plugin;
-        clickSignal = new ClickData(plugin.getMaxDataLength());
+        leftClickSignal = new ClickData(plugin.getMaxDataLength(), ClickType.LEFT);
+        rightClickSignal = new ClickData(plugin.getMaxDataLength(), ClickType.RIGHT);
     }
 
     /**
@@ -148,11 +151,24 @@ public class PlayerData {
     }
 
     /**
-     * Returns the player's clicking data signal
-     * @return clicking data signal
+     * @return left clicking data signal
      */
-    public ClickData getClickSignal() {
-        return clickSignal;
+    public ClickData getLeftClickSignal() {
+        return leftClickSignal;
+    }
+
+    /**
+     * @return right clicking data signal
+     */
+    public ClickData getRightClickSignal() {
+        return rightClickSignal;
+    }
+
+    /**
+     * @return clicking data signal in a list
+     */
+    public List<ClickData> getClickSignals() {
+        return Arrays.asList(leftClickSignal, rightClickSignal);
     }
 
 }

@@ -31,7 +31,9 @@ public class Collector implements Runnable {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             UUID playerId = player.getUniqueId();
-            plugin.getPlayerData(playerId).getClickSignal().add(0);
+            for(ClickData data : plugin.getPlayerData(playerId).getClickSignals()) {
+                data.add(0);
+            }
         }
 
     }

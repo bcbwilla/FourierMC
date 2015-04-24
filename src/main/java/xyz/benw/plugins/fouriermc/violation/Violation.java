@@ -9,12 +9,14 @@ public class Violation extends BaseViolation {
 
     private ViolationType violationType;
     private double value;
+    private ClickType clickType;
     private Long timestamp;
     private boolean active = true;
 
-    public Violation(ViolationType violationType, double value) {
+    public Violation(ViolationType violationType, double value, ClickType clickType) {
         super(violationType);
         this.value = value;
+        this.clickType = clickType;
 
         this.timestamp = System.currentTimeMillis();
     }
@@ -37,6 +39,11 @@ public class Violation extends BaseViolation {
 
     public void setActive(boolean set) {
         active = set;
+    }
+
+    public ClickType getClickType() {
+        return clickType;
+
     }
 
 }

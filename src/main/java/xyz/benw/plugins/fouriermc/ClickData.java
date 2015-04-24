@@ -1,5 +1,7 @@
 package xyz.benw.plugins.fouriermc;
 
+import xyz.benw.plugins.fouriermc.violation.ClickType;
+
 import java.util.ArrayDeque;
 
 /**
@@ -15,6 +17,8 @@ public class ClickData implements IClickData {
 
     private ArrayDeque<Integer> data = new ArrayDeque<Integer>();
 
+    private ClickType clickType;
+
     private final int MAX_DATA_LENGTH;
 
     /**
@@ -22,9 +26,11 @@ public class ClickData implements IClickData {
      *
      * @param maxLength the length of the queue.
      *                  If more data is added, the queue will "roll over".
+     * @param clickType the type of click (left or right)
      */
-    public ClickData(int maxLength) {
+    public ClickData(int maxLength, ClickType clickType) {
         this.MAX_DATA_LENGTH = maxLength;
+        this.clickType = clickType;
     }
 
     /**
@@ -108,6 +114,13 @@ public class ClickData implements IClickData {
      */
     public int getMaxLength() {
         return MAX_DATA_LENGTH;
+    }
+
+    /**
+     * @return click type
+     */
+    public ClickType getClickType() {
+        return clickType;
     }
 
 }

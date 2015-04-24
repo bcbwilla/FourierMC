@@ -5,6 +5,7 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.descriptive.rank.Max;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.bukkit.Bukkit;
+import xyz.benw.plugins.fouriermc.ClickData;
 import xyz.benw.plugins.fouriermc.analysis.datatests.ClicksPerSecond;
 import xyz.benw.plugins.fouriermc.FourierMC;
 import xyz.benw.plugins.fouriermc.IClickData;
@@ -34,27 +35,31 @@ public class DescriptiveAnalyzer implements Runnable {
 
             for (Map.Entry<UUID, PlayerData> entry : plugin.getPlayerDataMap().entrySet()) {
                 UUID playerId = entry.getKey();
-                IClickData data = entry.getValue().getClickSignal();
-                String name = Bukkit.getPlayer(playerId).getDisplayName();
 
-                if(!data.isEmpty()) {
+                for(ClickData data : entry.getValue().getClickSignals()) {
+                    String name = Bukkit.getPlayer(playerId).getDisplayName();
 
-                    double[] dataArray = data.toDoubleArray();
-                    double sum = new Sum().evaluate(dataArray);
+                    if(!data.isEmpty()) {
 
-                    if(sum != 0) {
-                        double cps = new ClicksPerSecond(dataArray, plugin.getSamplePeriod()).getClicksPerSecond();
-                        double mean = new Mean().evaluate(dataArray);
-                        double max = new Max().evaluate(dataArray);
-                        double std = new StandardDeviation().evaluate(dataArray);
+                        double[] dataArray = data.toDoubleArray();
+                        double sum = new Sum().evaluate(dataArray);
 
-                        plugin.getLogger().info("Descriptive Analysis for " + name + ":");
-                        plugin.getLogger().info(" Size: " + Integer.toString(data.size()));
-                        plugin.getLogger().info(" Max:  " + Double.toString(max));
-                        plugin.getLogger().info(" Mean: " + Double.toString(mean));
-                        plugin.getLogger().info(" Sum:  " + Double.toString(sum));
-                        plugin.getLogger().info(" Std:  " + Double.toString(std));
-                        plugin.getLogger().info(" CPS:  " + cps);
+                        if(sum != 0) {
+                            double cps = new ClicksPerSecond(dataArray, plugin.getSamplePeriod()).getClicksPerSecond();
+                            double mean = new Mean().evaluate(dataArray);
+                            double max = new Max().evaluate(dataArray);
+                            double std = new StandardDeviation().evaluate(dataArray);
+
+                            String msg = "Descriptive Analysis of " + data.getClickType().toString();
+                            msg +=  " clicking for " + name + ":";
+                            plugin.getLogger().info(msg);
+                            plugin.getLogger().info(" Size: " + Integer.toString(data.size()));
+                            plugin.getLogger().info(" Max:  " + Double.toString(max));
+                            plugin.getLogger().info(" Mean: " + Double.toString(mean));
+                            plugin.getLogger().info(" Sum:  " + Double.toString(sum));
+                            plugin.getLogger().info(" Std:  " + Double.toString(std));
+                            plugin.getLogger().info(" CPS:  " + cps);
+                        }
                     }
                 }
             }
