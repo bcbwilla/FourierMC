@@ -49,7 +49,6 @@ public class ClicksPerSecond implements IDataTest {
      * @return         true if test passed, false if test failed.
      *                 A failed test implies suspicious activity.
      */
-    @Override
     public boolean evaluate(double criteria) {
         return getClicksPerSecond() < criteria;
     }

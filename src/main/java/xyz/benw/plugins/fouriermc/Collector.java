@@ -26,7 +26,6 @@ public class Collector implements Runnable {
     /**
      * Run the collector
      */
-    @Override
     public void run() {
 
         for(Player player : Bukkit.getOnlinePlayers()) {

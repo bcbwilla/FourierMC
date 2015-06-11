@@ -30,7 +30,6 @@ public class DescriptiveAnalyzer implements Runnable {
         this.plugin = plugin;
     }
 
-    @Override
     public void run() {
         if(!plugin.getPlayerDataMap().isEmpty()){
 

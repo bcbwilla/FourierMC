@@ -40,7 +40,6 @@ public class QuantitativeAnalyzer implements Runnable {
     /**
      * Run the datatests.
      */
-    @Override
     public void run() {
         if(!plugin.getPlayerDataMap().isEmpty()) {
 
