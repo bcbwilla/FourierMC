@@ -13,6 +13,7 @@ import xyz.benw.plugins.fouriermc.player.PlayerData;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * Logs descriptive statistics about a player's signal.
@@ -50,15 +51,16 @@ public class DescriptiveAnalyzer implements Runnable {
                             double max = new Max().evaluate(dataArray);
                             double std = new StandardDeviation().evaluate(dataArray);
 
+                            Logger logger = plugin.getLogger();
                             String msg = "Descriptive Analysis of " + data.getClickType().toString();
                             msg +=  " clicking for " + name + ":";
-                            plugin.getLogger().info(msg);
-                            plugin.getLogger().info(" Size: " + Integer.toString(data.size()));
-                            plugin.getLogger().info(" Max:  " + Double.toString(max));
-                            plugin.getLogger().info(" Mean: " + Double.toString(mean));
-                            plugin.getLogger().info(" Sum:  " + Double.toString(sum));
-                            plugin.getLogger().info(" Std:  " + Double.toString(std));
-                            plugin.getLogger().info(" CPS:  " + cps);
+                            logger.info(msg);
+                            logger.info(" Size: " + Integer.toString(data.size()));
+                            logger.info(" Max:  " + Double.toString(max));
+                            logger.info(" Mean: " + Double.toString(mean));
+                            logger.info(" Sum:  " + Double.toString(sum));
+                            logger.info(" Std:  " + Double.toString(std));
+                            logger.info(" CPS:  " + cps);
                         }
                     }
                 }
